@@ -22,7 +22,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseDto saveNewExpense(ExpenseDto expenseDto) {
+    public ExpenseDto createNewExpense(ExpenseDto expenseDto) {
         return expenseMapper.expenseToExpenseDto(expenseRepository.save(expenseMapper.expenseDtoToExpense(expenseDto)));
     }
 
@@ -36,6 +36,6 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public void deleteById(Long expenseId) {
-
+        expenseRepository.deleteById(expenseId);
     }
 }
