@@ -3,7 +3,6 @@ package com.springexercise.mybudgetapp.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -17,7 +16,7 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal price;
+    private Double price;
 
     private String name;
 

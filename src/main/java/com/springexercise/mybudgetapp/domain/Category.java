@@ -4,7 +4,6 @@ package com.springexercise.mybudgetapp.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +19,20 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private BigDecimal categoryAmount;
+    private Double categoryAmount;
 
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Expense> expenseList = new ArrayList<>();
 
+    public Double updateCategoryAmount() {
+        for (int i = 0; i < expenseList.size(); i++) {
+            if (expenseList.get(i) != null) {
+                categoryAmount -= expenseList.get(i).getPrice();
+            }
+        }
+        return categoryAmount;
+    }
 
 }
