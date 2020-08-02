@@ -27,7 +27,7 @@ public class ExpenseController {
         ExpenseListDto expenseListDto = new ExpenseListDto();
         expenseListDto.setExpenseDtoList(list);
 
-        return new ResponseEntity<>(expenseListDto, HttpStatus.OK);
+        return new ResponseEntity<ExpenseListDto>(expenseListDto, HttpStatus.OK);
     }
 
     @GetMapping({"/expense/{expenseId}"})
