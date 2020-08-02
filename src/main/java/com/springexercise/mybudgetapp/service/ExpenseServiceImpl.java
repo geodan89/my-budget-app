@@ -8,12 +8,24 @@ import com.springexercise.mybudgetapp.web.model.ExpenseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
+
+
+    @Override
+    public List<ExpenseDto> getAllExpenses() {
+        return expenseRepository.findAllByDeletedFalse()
+                .stream()
+                .map(expenseMapper::expenseToExpenseDto)
+                .collect(Collectors.toList());
+    }
 
     @Override
     public ExpenseDto getExpenseById(Long expenseId) {
@@ -22,7 +34,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     }
 
     @Override
-    public ExpenseDto createNewExpense(ExpenseDto expenseDto) {
+    public ExpenseDto saveNewExpense(ExpenseDto expenseDto) {
         return expenseMapper.expenseToExpenseDto(expenseRepository.save(expenseMapper.expenseDtoToExpense(expenseDto)));
     }
 
