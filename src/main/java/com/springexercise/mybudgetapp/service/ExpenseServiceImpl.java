@@ -21,10 +21,11 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     @Override
     public List<ExpenseDto> getAllExpenses() {
-        return expenseRepository.findAllByDeletedFalse()
+        List<ExpenseDto> list = expenseRepository.findAll()
                 .stream()
                 .map(expenseMapper::expenseToExpenseDto)
                 .collect(Collectors.toList());
+        return list;
     }
 
     @Override
@@ -41,8 +42,8 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseDto updateExpense(Long expenseId, ExpenseDto expenseDto) {
         Expense expense = expenseRepository.findById(expenseId).orElseThrow(NotFoundException::new);
-        expense.setName(expenseDto.getName());
-        expense.setPrice(expenseDto.getPrice());
+        expense.setName(expenseDto.getExpenseName());
+        expense.setPrice(expenseDto.getExpensePrice());
         return expenseMapper.expenseToExpenseDto(expenseRepository.save(expense));
     }
 
