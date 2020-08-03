@@ -3,6 +3,7 @@ package com.springexercise.mybudgetapp.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 
 @Getter
 @Setter
@@ -22,5 +23,7 @@ public class Expense {
 
     @ManyToOne
     private Category category;
+
+    private OffsetDateTime createdDate;
 
 }

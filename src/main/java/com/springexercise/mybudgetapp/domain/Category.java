@@ -4,6 +4,7 @@ package com.springexercise.mybudgetapp.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class Category {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Expense> expenseList = new ArrayList<>();
+
+    private OffsetDateTime createdDate;
 
     public Double updateCategoryAmount() {
         for (int i = 0; i < expenseList.size(); i++) {
