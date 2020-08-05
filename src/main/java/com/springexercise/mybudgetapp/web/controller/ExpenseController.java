@@ -27,13 +27,14 @@ public class ExpenseController {
         ExpenseListDto expenseListDto = new ExpenseListDto();
         expenseListDto.setExpenseDtoList(list);
 
-        return new ResponseEntity<ExpenseListDto>(expenseListDto, HttpStatus.OK);
+        return new ResponseEntity<>(expenseListDto, HttpStatus.OK);
     }
 
-    @GetMapping({"/expense/{expenseId}"})
-    public ResponseEntity<ExpenseDto> getExpenseById(@PathVariable Long expenseId) {
+    @GetMapping("/expense/{expenseId}")
+    public ResponseEntity<ExpenseDto> getExpenseById(@PathVariable String expenseId) {
         log.debug("I'm in controller GET method...");
-        return new ResponseEntity<ExpenseDto>(expenseService.getExpenseById(expenseId), HttpStatus.OK);
+        Long expId = Long.valueOf(expenseId);
+        return new ResponseEntity<>(expenseService.getExpenseById(expId), HttpStatus.OK);
     }
 
     @PostMapping("/expense")
@@ -41,25 +42,27 @@ public class ExpenseController {
         ExpenseDto savedExpenseDto = expenseService.saveNewExpense(expenseDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Location", "/api/v1/expense" + savedExpenseDto.getId().toString());
+        httpHeaders.add("Location", "/api/v1/expense/" + savedExpenseDto.getId().toString());
         return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
 
-    @PutMapping("/expense/{expenseId}")
-    public ResponseEntity<ExpenseDto> updateExpense(@PathVariable Long expenseId,
+    @PutMapping({"/expense/{expenseId}"})
+    public ResponseEntity<ExpenseDto> updateExpense(@PathVariable String expenseId,
                                                     @RequestBody @Valid ExpenseDto expenseDto) {
-        return new ResponseEntity<>(expenseService.updateExpense(expenseId, expenseDto), HttpStatus.OK);
+        Long expId = Long.valueOf(expenseId);
+        return new ResponseEntity<>(expenseService.updateExpense(expId, expenseDto), HttpStatus.OK);
     }
 
-    @PatchMapping("/expense/{expenseId}")
-    public ResponseEntity<ExpenseDto> patchExpense(@PathVariable Long expenseId,
-                                                   @RequestBody @Valid ExpenseDto expenseDto) {
-        return new ResponseEntity<>(expenseService.updateExpense(expenseId, expenseDto), HttpStatus.OK);
-    }
+//    @PatchMapping({"/expense/{expenseId}"})
+//    public ResponseEntity<ExpenseDto> patchExpense(@PathVariable Long expenseId,
+//                                                   @RequestBody @Valid ExpenseDto expenseDto) {
+//        return new ResponseEntity<>(expenseService.updateExpense(expenseId, expenseDto), HttpStatus.OK);
+//    }
 
-    @DeleteMapping("/expense/{expenseId}")
+    @DeleteMapping({"/expense/{expenseId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteExpense(@PathVariable Long expenseId) {
-        expenseService.deleteById(expenseId);
+    public void deleteExpense(@PathVariable String expenseId) {
+        Long expId = Long.valueOf(expenseId);
+        expenseService.deleteById(expId);
     }
 }
