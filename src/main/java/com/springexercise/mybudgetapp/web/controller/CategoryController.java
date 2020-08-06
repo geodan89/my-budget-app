@@ -2,12 +2,15 @@ package com.springexercise.mybudgetapp.web.controller;
 
 import com.springexercise.mybudgetapp.service.CategoryService;
 import com.springexercise.mybudgetapp.web.model.CategoryDto;
+import com.springexercise.mybudgetapp.web.model.CategoryListDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -16,6 +19,15 @@ import org.springframework.web.bind.annotation.*;
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    @GetMapping("/categories")
+    public ResponseEntity<CategoryListDto> getAllCategories() {
+        List<CategoryDto> list = categoryService.getAllCategories();
+        CategoryListDto categoryListDto = new CategoryListDto();
+        categoryListDto.setCategoryListDto(list);
+
+        return new ResponseEntity<>(categoryListDto, HttpStatus.OK);
+    }
 
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable("categoryId") String categoryId) {

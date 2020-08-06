@@ -8,6 +8,9 @@ import com.springexercise.mybudgetapp.web.model.CategoryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -20,6 +23,15 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto getCategoryById(Long categoryId) {
         return categoryMapper.categoryToCategoryDto(categoryRepository.findById(categoryId)
                 .orElseThrow(NotFoundException::new));
+    }
+
+    @Override
+    public List<CategoryDto> getAllCategories() {
+        List<CategoryDto> list = categoryRepository.findAll()
+                .stream()
+                .map(categoryMapper::categoryToCategoryDto)
+                .collect(Collectors.toList());
+        return list;
     }
 
     @Override
