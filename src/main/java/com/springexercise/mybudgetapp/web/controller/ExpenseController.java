@@ -21,36 +21,60 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
 
-    @GetMapping("/expenses")
-    public ResponseEntity<ExpenseListDto> getAllExpenses() {
-        List<ExpenseDto> list = expenseService.getAllExpenses();
+    /**
+     * Get all expenses from a category
+     **/
+    @GetMapping("/category/{categoryId}/expenses")
+    public ResponseEntity<ExpenseListDto> getAllExpenses(@PathVariable("categoryId") String categoryId) {
+        //To be properly implemented.
+
+        Long catId = Long.valueOf(categoryId);
+        List<ExpenseDto> list = expenseService.getAllExpenses(catId);
         ExpenseListDto expenseListDto = new ExpenseListDto();
         expenseListDto.setExpenseDtoList(list);
 
         return new ResponseEntity<>(expenseListDto, HttpStatus.OK);
     }
 
-    @GetMapping("/expense/{expenseId}")
-    public ResponseEntity<ExpenseDto> getExpenseById(@PathVariable String expenseId) {
+    /**
+     * Get a certain expense from a category
+     **/
+    @GetMapping("/category/{categoryId}/expense/{expenseId}")
+    public ResponseEntity<ExpenseDto> getExpenseById(@PathVariable("categoryId") String categoryId, @PathVariable("expenseId") String expenseId) {
+        //to be implemented;
+
         log.debug("I'm in controller GET method...");
         Long expId = Long.valueOf(expenseId);
-        return new ResponseEntity<>(expenseService.getExpenseById(expId), HttpStatus.OK);
+        Long catId = Long.valueOf(categoryId);
+        return new ResponseEntity<>(expenseService.findByCategoryIdAndExpenseId(catId, expId), HttpStatus.OK);
     }
 
-    @PostMapping("/expense")
-    public ResponseEntity<ExpenseDto> createNewExpense(@RequestBody ExpenseDto expenseDto) {
-        ExpenseDto savedExpenseDto = expenseService.saveNewExpense(expenseDto);
+    /**
+     * Create a new expense in a category
+     **/
+    @PostMapping("/category/{categoryId}/expense")
+    public ResponseEntity<ExpenseDto> createNewExpense(@PathVariable String categoryId, @RequestBody ExpenseDto expenseDto) {
+        //To be properly implemented.
+
+        Long catId = Long.valueOf(categoryId);
+        ExpenseDto savedExpenseDto = expenseService.saveNewExpense(catId, expenseDto);
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("Location", "/api/v1/expense/" + savedExpenseDto.getId().toString());
         return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
 
-    @PutMapping({"/expense/{expenseId}"})
-    public ResponseEntity<ExpenseDto> updateExpense(@PathVariable String expenseId,
-                                                    @RequestBody @Valid ExpenseDto expenseDto) {
+    /**
+     * Update an expense in a category
+     **/
+    @PutMapping({"/category/{categoryId}/expense/{expenseId}"})
+    public ResponseEntity<ExpenseDto> updateExpense(@PathVariable("categoryId") String categoryId,
+                                                    @PathVariable("expenseId") String expenseId, @RequestBody @Valid ExpenseDto expenseDto) {
+        //To be properly implemented.
+
         Long expId = Long.valueOf(expenseId);
-        return new ResponseEntity<>(expenseService.updateExpense(expId, expenseDto), HttpStatus.OK);
+        Long catId = Long.valueOf(categoryId);
+        return new ResponseEntity<>(expenseService.updateExpense(catId, expId, expenseDto), HttpStatus.OK);
     }
 
 //    @PatchMapping({"/expense/{expenseId}"})
@@ -59,10 +83,15 @@ public class ExpenseController {
 //        return new ResponseEntity<>(expenseService.updateExpense(expenseId, expenseDto), HttpStatus.OK);
 //    }
 
-    @DeleteMapping({"/expense/{expenseId}"})
+    /**
+     * Delete an expense from a category
+     **/
+    @DeleteMapping({"/category/{categoryId}/expense/{expenseId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteExpense(@PathVariable String expenseId) {
+    public void deleteExpenseById(@PathVariable("categoryId") String categoryId, @PathVariable("expenseId") String expenseId) {
+        //To be properly implemented.
         Long expId = Long.valueOf(expenseId);
-        expenseService.deleteById(expId);
+        Long catId = Long.valueOf(categoryId);
+        expenseService.deleteById(catId, expId);
     }
 }

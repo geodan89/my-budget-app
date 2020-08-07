@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface ExpenseService {
 
-    List<ExpenseDto> getAllExpenses();
+    List<ExpenseDto> getAllExpenses(Long categoryId);
 
-    ExpenseDto getExpenseById(Long expenseId);
+    ExpenseDto findByCategoryIdAndExpenseId(Long categoryId, Long expenseId);
 
-    ExpenseDto saveNewExpense(ExpenseDto expenseDto);
+    ExpenseDto saveNewExpense(Long categoryID, ExpenseDto expenseDto);
 
-    ExpenseDto updateExpense(Long expenseId, ExpenseDto expenseDto);
+    ExpenseDto updateExpense(Long categoryId, Long expenseId, ExpenseDto expenseDto);
 
-    void deleteById(Long expenseId);
+    void deleteById(Long categoryId, Long expenseId);
 }

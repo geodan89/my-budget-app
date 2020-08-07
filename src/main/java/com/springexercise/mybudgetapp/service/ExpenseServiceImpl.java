@@ -1,54 +1,71 @@
 package com.springexercise.mybudgetapp.service;
 
+import com.springexercise.mybudgetapp.domain.Category;
 import com.springexercise.mybudgetapp.domain.Expense;
+import com.springexercise.mybudgetapp.repository.CategoryRepository;
 import com.springexercise.mybudgetapp.repository.ExpenseRepository;
-import com.springexercise.mybudgetapp.web.controller.NotFoundException;
 import com.springexercise.mybudgetapp.web.mapper.ExpenseMapper;
 import com.springexercise.mybudgetapp.web.model.ExpenseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
+    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
     private final ExpenseRepository expenseRepository;
     private final ExpenseMapper expenseMapper;
 
 
     @Override
-    public List<ExpenseDto> getAllExpenses() {
-        List<ExpenseDto> list = expenseRepository.findAll()
-                .stream()
-                .map(expenseMapper::expenseToExpenseDto)
-                .collect(Collectors.toList());
-        return list;
+    public List<ExpenseDto> getAllExpenses(Long categoryId) {
+        //to be implemented;
+        return null;
     }
 
     @Override
-    public ExpenseDto getExpenseById(Long expenseId) {
-        return expenseMapper.expenseToExpenseDto(expenseRepository.findById(expenseId)
-                .orElseThrow(NotFoundException::new));
+    public ExpenseDto findByCategoryIdAndExpenseId(Long categoryId, Long expenseId) {
+        Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
+        if (!categoryOptional.isPresent()) {
+            log.debug("category not found by Id. categoryId=" + categoryId);
+        }
+
+        Category category = categoryOptional.get();
+        List<Expense> expenseList = category.getExpenseList();
+        Optional<ExpenseDto> expenseDtoOptional = Optional.empty();
+        for (Expense expense : expenseList) {
+            if (expense.getId().equals(expenseId)) {
+                expenseDtoOptional = Optional.ofNullable(expenseMapper.expenseToExpenseDto(expense));
+            }
+        }
+        if (!expenseDtoOptional.isPresent()) {
+            log.error("expense not found by Id. expenseId=" + expenseId);
+        }
+        return expenseDtoOptional.get();
     }
 
     @Override
-    public ExpenseDto saveNewExpense(ExpenseDto expenseDto) {
-        return expenseMapper.expenseToExpenseDto(expenseRepository.save(expenseMapper.expenseDtoToExpense(expenseDto)));
+    public ExpenseDto saveNewExpense(Long categoryID, ExpenseDto expenseDto) {
+        //to be implemented;
+        return null;
     }
 
     @Override
-    public ExpenseDto updateExpense(Long expenseId, ExpenseDto expenseDto) {
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(NotFoundException::new);
-        expense.setName(expenseDto.getExpenseName());
-        expense.setPrice(expenseDto.getExpensePrice());
-        return expenseMapper.expenseToExpenseDto(expenseRepository.save(expense));
+    public ExpenseDto updateExpense(Long categoryId, Long expenseId, ExpenseDto expenseDto) {
+        //to be implemented;
+        return null;
     }
 
     @Override
-    public void deleteById(Long expenseId) {
-        expenseRepository.deleteById(expenseId);
+    public void deleteById(Long categoryId, Long expenseId) {
+        //to be implemented;
     }
+
 }
