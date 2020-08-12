@@ -2,6 +2,7 @@ package com.springexercise.mybudgetapp.domain;
 
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -20,22 +21,25 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Double categoryAmount;
+    private Double initialAmount;
 
-    private String name;
+    private Double currentAmount;
+
+    private String categoryName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
     private List<Expense> expenseList = new ArrayList<>();
 
+    @Column(updatable = false)
+    @CreationTimestamp
     private OffsetDateTime createdDate;
 
-    public Double updateCategoryAmount() {
-        for (int i = 0; i < expenseList.size(); i++) {
-            if (expenseList.get(i) != null) {
-                categoryAmount -= expenseList.get(i).getPrice();
+    public Double updateCurrentAmount() {
+        for (int i = 0; i < this.expenseList.size(); i++) {
+            if (this.expenseList.get(i) != null) {
+                this.currentAmount -= this.expenseList.get(i).getExpensePrice();
             }
         }
-        return categoryAmount;
+        return this.currentAmount;
     }
-
 }
