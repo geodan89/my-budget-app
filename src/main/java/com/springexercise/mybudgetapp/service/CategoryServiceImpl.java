@@ -36,14 +36,27 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto saveNewCategory(CategoryDto categoryDto) {
-        return categoryMapper.categoryToCategoryDto(categoryRepository.save(categoryMapper.categoryDtoToCategory(categoryDto)));
+        Category category = categoryMapper.categoryDtoToCategory(categoryDto);
+        category.setCategoryName(categoryDto.getCategoryName());
+        category.setInitialAmount(categoryDto.getInitialAmount());
+        category.setCurrentAmount(categoryDto.getInitialAmount());
+        category.setCreatedDate(categoryDto.getCreatedDate());
+        Category savedCategory = categoryRepository.save(category);
+        CategoryDto categoryDto1 = categoryMapper.categoryToCategoryDto(savedCategory);
+        return categoryDto1;
     }
 
     @Override
     public CategoryDto updateCategoryDto(Long categoryId, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NotFoundException::new);
-        category.setName(categoryDto.getCategoryName());
-        category.setCategoryAmount(categoryDto.getCategoryAmount());
+        Double updatedInitialAmount = categoryDto.getInitialAmount();
+        Double initialAmount = category.getInitialAmount();
+        Double currentAmount = category.getCurrentAmount();
+        Double updateDifference = updatedInitialAmount - initialAmount;
+        currentAmount = currentAmount + updateDifference;
+        category.setCategoryName(categoryDto.getCategoryName());
+        category.setInitialAmount(categoryDto.getInitialAmount());
+        category.setCurrentAmount(currentAmount);
 
         return categoryMapper.categoryToCategoryDto(categoryRepository.save(category));
     }
@@ -52,4 +65,5 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteById(Long categoryId) {
         categoryRepository.deleteById(categoryId);
     }
+
 }
