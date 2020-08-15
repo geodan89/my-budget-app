@@ -42,7 +42,7 @@ public class CategoryController {
     public ResponseEntity<CategoryDto> createNewCategory(@RequestBody CategoryDto categoryDto) {
         CategoryDto savedCategoryDto = categoryService.saveNewCategory(categoryDto);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", "/api/v1/category/" + savedCategoryDto.getId().toString());
+        headers.add("Location", "/api/v1/category/" + savedCategoryDto.getId());
 
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
