@@ -49,14 +49,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateCategoryDto(Long categoryId, CategoryDto categoryDto) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(NotFoundException::new);
-        Double updatedInitialAmount = categoryDto.getInitialAmount();
-        Double initialAmount = category.getInitialAmount();
-        Double currentAmount = category.getCurrentAmount();
-        Double updateDifference = updatedInitialAmount - initialAmount;
-        currentAmount = currentAmount + updateDifference;
         category.setCategoryName(categoryDto.getCategoryName());
         category.setInitialAmount(categoryDto.getInitialAmount());
-        category.setCurrentAmount(currentAmount);
+        category.setCurrentAmount(category.getInitialAmount());
+        category.updateCurrentAmount();
 
         return categoryMapper.categoryToCategoryDto(categoryRepository.save(category));
     }

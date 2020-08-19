@@ -35,10 +35,14 @@ public class Category {
     private OffsetDateTime createdDate;
 
     public Double updateCurrentAmount() {
-        for (int i = 0; i < this.expenseList.size(); i++) {
-            if (this.expenseList.get(i) != null) {
-                this.currentAmount -= this.expenseList.get(i).getExpensePrice();
+        if (this.expenseList.size() != 0) {
+            for (int i = 0; i < this.expenseList.size(); i++) {
+                if (this.expenseList.get(i) != null) {
+                    this.currentAmount -= this.expenseList.get(i).getExpensePrice();
+                }
             }
+        } else {
+            this.currentAmount = this.initialAmount;
         }
         return this.currentAmount;
     }
