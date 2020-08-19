@@ -8,7 +8,6 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
-import javax.validation.constraints.Positive;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -23,7 +22,6 @@ public class ExpenseDto {
     private String id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @Positive
     private Double expensePrice;
 
     @NotBlank
