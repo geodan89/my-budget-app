@@ -51,9 +51,6 @@ public class ExpenseServiceImpl implements ExpenseService {
     public ExpenseDto saveNewExpense(Long categoryId, ExpenseDto expenseDto) {
         Category category = getCategoryById(categoryId);
         Expense expense = expenseMapper.expenseDtoToExpense(expenseDto);
-        expense.setExpenseName(expenseDto.getExpenseName());
-        expense.setExpensePrice(expenseDto.getExpensePrice());
-        expense.setCreatedDate(expenseDto.getCreatedDate());
         expense.setCategory(category);
         category.getExpenseList().add(expense);
         Double currentAmount = category.getCurrentAmount();
@@ -74,13 +71,12 @@ public class ExpenseServiceImpl implements ExpenseService {
             throw new NotFoundException();
         } else {
             Expense expenseFound = expenseRepository.findById(expenseId).orElseThrow(NotFoundException::new);
-            //expenseFound.setId(expenseId);
             expenseFound.setExpenseName(expenseDto.getExpenseName());
             Double diff = expenseFound.getExpensePrice() - expenseDto.getExpensePrice();
             expenseFound.setExpensePrice(expenseDto.getExpensePrice());
             category.setCurrentAmount(category.getCurrentAmount() + diff);
-            Expense saveExpense = expenseRepository.save(expenseFound);
-            return expenseMapper.expenseToExpenseDto(saveExpense);
+            Expense savedExpense = expenseRepository.save(expenseFound);
+            return expenseMapper.expenseToExpenseDto(savedExpense);
         }
     }
 

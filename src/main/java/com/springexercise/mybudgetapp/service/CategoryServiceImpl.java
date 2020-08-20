@@ -37,10 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto saveNewCategory(CategoryDto categoryDto) {
         Category category = categoryMapper.categoryDtoToCategory(categoryDto);
-        category.setCategoryName(categoryDto.getCategoryName());
-        category.setInitialAmount(categoryDto.getInitialAmount());
         category.setCurrentAmount(categoryDto.getInitialAmount());
-        category.setCreatedDate(categoryDto.getCreatedDate());
         Category savedCategory = categoryRepository.save(category);
         CategoryDto categoryDto1 = categoryMapper.categoryToCategoryDto(savedCategory);
         return categoryDto1;
