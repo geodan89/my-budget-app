@@ -2,7 +2,7 @@ package com.springexercise.mybudgetapp.service;
 
 import com.springexercise.mybudgetapp.domain.Category;
 import com.springexercise.mybudgetapp.repository.CategoryRepository;
-import com.springexercise.mybudgetapp.web.controller.NotFoundException;
+import com.springexercise.mybudgetapp.service.exceptions.CategoryNotFoundException;
 import com.springexercise.mybudgetapp.web.mapper.CategoryMapper;
 import com.springexercise.mybudgetapp.web.model.CategoryDto;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategoryById(Long categoryId) {
         return categoryMapper.categoryToCategoryDto(categoryRepository.findById(categoryId)
-                .orElseThrow(NotFoundException::new));
+                .orElseThrow(CategoryNotFoundException::new));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto updateCategoryDto(Long categoryId, CategoryDto categoryDto) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(NotFoundException::new);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
         category.setCategoryName(categoryDto.getCategoryName());
         category.setInitialAmount(categoryDto.getInitialAmount());
         category.setCurrentAmount(category.getInitialAmount());

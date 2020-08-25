@@ -6,7 +6,6 @@ import com.springexercise.mybudgetapp.repository.CategoryRepository;
 import com.springexercise.mybudgetapp.repository.ExpenseRepository;
 import com.springexercise.mybudgetapp.service.exceptions.CategoryNotFoundException;
 import com.springexercise.mybudgetapp.service.exceptions.ExpenseNotFoundException;
-import com.springexercise.mybudgetapp.web.controller.NotFoundException;
 import com.springexercise.mybudgetapp.web.mapper.ExpenseMapper;
 import com.springexercise.mybudgetapp.web.model.ExpenseDto;
 import lombok.RequiredArgsConstructor;
@@ -64,20 +63,18 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseDto updateExpense(Long categoryId, Long expenseId, ExpenseDto expenseDto) {
         Category category = getCategoryById(categoryId);
-        Optional<Expense> expenseOptional = category.getExpenseList().stream()
-                .filter(expense -> expense.getId().equals(expenseId))
-                .findFirst();
-        if (!expenseOptional.isPresent()) {
-            throw new NotFoundException();
-        } else {
-            Expense expenseFound = expenseRepository.findById(expenseId).orElseThrow(NotFoundException::new);
-            expenseFound.setExpenseName(expenseDto.getExpenseName());
-            Double diff = expenseFound.getExpensePrice() - expenseDto.getExpensePrice();
-            expenseFound.setExpensePrice(expenseDto.getExpensePrice());
-            category.setCurrentAmount(category.getCurrentAmount() + diff);
-            Expense savedExpense = expenseRepository.save(expenseFound);
-            return expenseMapper.expenseToExpenseDto(savedExpense);
+        Expense expenseFound = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
+        if (!expenseFound.getCategory().getId().equals(category.getId())) {
+            throw new CategoryNotFoundException(categoryId);
         }
+
+        expenseFound.setExpenseName(expenseDto.getExpenseName());
+        Double diff = expenseFound.getExpensePrice() - expenseDto.getExpensePrice();
+        expenseFound.setExpensePrice(expenseDto.getExpensePrice());
+        category.setCurrentAmount(category.getCurrentAmount() + diff);
+        Expense savedExpense = expenseRepository.save(expenseFound);
+        return expenseMapper.expenseToExpenseDto(savedExpense);
+
     }
 
     @Override
@@ -87,7 +84,7 @@ public class ExpenseServiceImpl implements ExpenseService {
                 .filter(expense -> expense.getId().equals(expenseId))
                 .findFirst();
         if (!expenseOptional.isPresent()) {
-            throw new ExpenseNotFoundException();
+            throw new ExpenseNotFoundException(expenseId);
         }
         Expense expense = expenseOptional.get();
         category.getExpenseList().remove(expense);
