@@ -100,7 +100,6 @@ class CategoryServiceImplTest {
         savedCategory.setCategoryName(categoryDto.getCategoryName());
         savedCategory.setInitialAmount(categoryDto.getInitialAmount());
         savedCategory.setCurrentAmount(categoryDto.getInitialAmount());
-        savedCategory.setId(1L);
 
         when(categoryRepository.findById(anyLong())).thenReturn(Optional.ofNullable(savedCategory));
         when(categoryRepository.save(any(Category.class))).thenReturn(savedCategory);
