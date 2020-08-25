@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class CategoryDto {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     @NotBlank
+    @NotNull
     private String categoryName;
 
     private List<ExpenseDto> expenseList = new ArrayList<>();

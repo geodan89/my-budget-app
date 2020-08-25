@@ -55,6 +55,20 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public CategoryDto patchCategoryDto(Long categoryId, CategoryDto categoryDto) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
+        if (categoryDto.getInitialAmount() != null) {
+            category.setInitialAmount(categoryDto.getInitialAmount());
+        }
+        if (categoryDto.getCategoryName() != null) {
+            category.setCategoryName(categoryDto.getCategoryName());
+        }
+        category.setCurrentAmount(category.getInitialAmount());
+        category.updateCurrentAmount();
+        return categoryMapper.categoryToCategoryDto(categoryRepository.save(category));
+    }
+
+    @Override
     public void deleteById(Long categoryId) {
         categoryRepository.deleteById(categoryId);
     }

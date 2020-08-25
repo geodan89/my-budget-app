@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class Category {
 
     private Double currentAmount;
 
+    @NotNull
     private String categoryName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")

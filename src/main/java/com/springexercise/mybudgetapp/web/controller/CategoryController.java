@@ -55,6 +55,14 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.updateCategoryDto(catId, categoryDto), HttpStatus.OK);
     }
 
+    @PatchMapping("/category/{categoryId}")
+    public ResponseEntity<CategoryDto> patchCategory(@PathVariable("categoryId") String categoryId,
+                                                     @RequestBody CategoryDto categoryDto) {
+        Long catId = Long.valueOf(categoryId);
+
+        return new ResponseEntity<>(categoryService.patchCategoryDto(catId, categoryDto), HttpStatus.OK);
+    }
+
     @DeleteMapping("/category/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable String categoryId) {
