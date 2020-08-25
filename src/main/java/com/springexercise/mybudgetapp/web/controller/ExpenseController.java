@@ -21,9 +21,7 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
 
-    /*
-     * Get all expenses from a category
-     */
+
     @GetMapping("/category/{categoryId}/expenses")
     public ResponseEntity<ExpenseListDto> getAllExpenses(@PathVariable("categoryId") String categoryId) {
         Long catId = Long.valueOf(categoryId);
@@ -34,9 +32,7 @@ public class ExpenseController {
         return new ResponseEntity<>(expenseListDto, HttpStatus.OK);
     }
 
-    /*
-     * Get a certain expense from a category
-     */
+
     @GetMapping("/category/{categoryId}/expense/{expenseId}")
     public ResponseEntity<ExpenseDto> getExpenseById(@PathVariable("categoryId") String categoryId, @PathVariable("expenseId") String expenseId) {
         log.debug("I'm in controller GET method...");
@@ -45,9 +41,7 @@ public class ExpenseController {
         return new ResponseEntity<>(expenseService.findByCategoryIdAndExpenseId(catId, expId), HttpStatus.OK);
     }
 
-    /*
-     * Create a new expense in a category
-     */
+
     @PostMapping("/category/{categoryId}/expense")
     public ResponseEntity<ExpenseDto> createNewExpense(@PathVariable String categoryId, @RequestBody ExpenseDto expenseDto) {
         Long catId = Long.valueOf(categoryId);
@@ -58,9 +52,7 @@ public class ExpenseController {
         return new ResponseEntity<>(httpHeaders, HttpStatus.CREATED);
     }
 
-    /*
-     * Update an expense in a category
-     */
+
     @PutMapping({"/category/{categoryId}/expense/{expenseId}"})
     public ResponseEntity<ExpenseDto> updateExpense(@PathVariable("categoryId") String categoryId,
                                                     @PathVariable("expenseId") String expenseId, @RequestBody @Valid ExpenseDto expenseDto) {
@@ -75,9 +67,7 @@ public class ExpenseController {
 //        return new ResponseEntity<>(expenseService.updateExpense(expenseId, expenseDto), HttpStatus.OK);
 //    }
 
-    /*
-     * Delete an expense from a category
-     */
+
     @DeleteMapping({"/category/{categoryId}/expense/{expenseId}"})
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteExpenseById(@PathVariable("categoryId") String categoryId, @PathVariable("expenseId") String expenseId) {
