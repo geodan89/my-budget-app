@@ -38,13 +38,17 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseDto findByCategoryIdAndExpenseId(Long categoryId, Long expenseId) {
         Category category = getCategoryById(categoryId);
-        Optional<Expense> expenseOptional = category.getExpenseList().stream()
-                .filter(expense -> expense.getId().equals(expenseId))
-                .findFirst();
-        if (!expenseOptional.isPresent()) {
+//        Optional<Expense> expenseOptional = category.getExpenseList().stream()
+//                .filter(expense -> expense.getId().equals(expenseId))
+//                .findFirst();
+//        if (!expenseOptional.isPresent()) {
+//            throw new ExpenseNotFoundException(expenseId);
+//        }
+        Expense expense = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
+        if (!category.getExpenseList().contains(expense)) {
+            log.debug("expense not found by expenseId=" + expenseId);
             throw new ExpenseNotFoundException(expenseId);
         }
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
         ExpenseDto expenseDto = expenseMapper.expenseToExpenseDto(expense);
         return expenseDto;
     }
@@ -66,13 +70,17 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseDto updateExpense(Long categoryId, Long expenseId, ExpenseDto expenseDto) {
         Category category = getCategoryById(categoryId);
-        Optional<Expense> expenseOptional = category.getExpenseList().stream()
-                .filter(expense -> expense.getId().equals(expenseId))
-                .findFirst();
-        if (!expenseOptional.isPresent()) {
+//        Optional<Expense> expenseOptional = category.getExpenseList().stream()
+//                .filter(expense -> expense.getId().equals(expenseId))
+//                .findFirst();
+//        if (!expenseOptional.isPresent()) {
+//            throw new ExpenseNotFoundException(expenseId);
+//        }
+        Expense expenseFound = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
+        if (!category.getExpenseList().contains(expenseFound)) {
+            log.debug("expense not found by expenseId=" + expenseId);
             throw new ExpenseNotFoundException(expenseId);
         }
-        Expense expenseFound = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
         expenseFound.setExpenseName(expenseDto.getExpenseName());
         Double diff = expenseFound.getExpensePrice() - expenseDto.getExpensePrice();
         expenseFound.setExpensePrice(expenseDto.getExpensePrice());
@@ -85,14 +93,17 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public void deleteById(Long categoryId, Long expenseId) {
         Category category = getCategoryById(categoryId);
-        Optional<Expense> expenseOptional = category.getExpenseList().stream()
-                .filter(expense -> expense.getId().equals(expenseId))
-                .findFirst();
-        if (!expenseOptional.isPresent()) {
+//        Optional<Expense> expenseOptional = category.getExpenseList().stream()
+//                .filter(expense -> expense.getId().equals(expenseId))
+//                .findFirst();
+//        if (!expenseOptional.isPresent()) {
+//            throw new ExpenseNotFoundException(expenseId);
+//        }
+        Expense expense = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
+        if (!category.getExpenseList().contains(expense)) {
+            log.debug("expense not found by expenseId=" + expenseId);
             throw new ExpenseNotFoundException(expenseId);
         }
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
-        ;
         category.getExpenseList().remove(expense);
         category.setCurrentAmount(category.getCurrentAmount() + expense.getExpensePrice());
         expenseRepository.deleteById(expenseId);
