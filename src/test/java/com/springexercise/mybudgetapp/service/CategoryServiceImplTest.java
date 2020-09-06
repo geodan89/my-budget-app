@@ -2,6 +2,7 @@ package com.springexercise.mybudgetapp.service;
 
 import com.springexercise.mybudgetapp.domain.Category;
 import com.springexercise.mybudgetapp.repository.CategoryRepository;
+import com.springexercise.mybudgetapp.service.exceptions.CategoryNotFoundException;
 import com.springexercise.mybudgetapp.web.mapper.CategoryMapper;
 import com.springexercise.mybudgetapp.web.model.CategoryDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -21,12 +23,12 @@ import static org.mockito.Mockito.*;
 
 class CategoryServiceImplTest {
 
-    CategoryService categoryService;
+    private CategoryService categoryService;
 
     @Mock
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
-    CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
+    private CategoryMapper categoryMapper = CategoryMapper.INSTANCE;
 
     @BeforeEach
     void setUp() {
@@ -49,6 +51,15 @@ class CategoryServiceImplTest {
 
         assertEquals("Cosmetice", categoryDto.getCategoryName());
         assertEquals(250.00, categoryDto.getInitialAmount());
+    }
+
+    @Test
+    void getCategoryByIdCategoryNotFoundTest() {
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(CategoryNotFoundException.class, () -> {
+            categoryService.getCategoryById(anyLong());
+        });
     }
 
     @Test
@@ -113,12 +124,21 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    void updateCategoryNotFoundTest() {
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        CategoryDto categoryDto = new CategoryDto();
+        assertThrows(CategoryNotFoundException.class, () -> {
+            categoryService.updateCategoryDto(anyLong(), categoryDto);
+        });
+    }
+
+    @Test
     void deleteByIdTest() {
         Long id = 1L;
 
-        categoryRepository.deleteById(id);
+        categoryService.deleteById(id);
 
         verify(categoryRepository, times(1)).deleteById(anyLong());
-
     }
 }
