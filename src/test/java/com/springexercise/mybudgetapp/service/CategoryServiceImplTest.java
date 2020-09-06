@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -131,6 +132,26 @@ class CategoryServiceImplTest {
         assertThrows(CategoryNotFoundException.class, () -> {
             categoryService.updateCategoryDto(anyLong(), categoryDto);
         });
+    }
+
+    @Test
+    void patchCategoryDtoTest() {
+        CategoryDto categoryDto = CategoryDto.builder().id("1").categoryName("Haine").build();
+        Category category = Category.builder()
+                .id(1L)
+                .categoryName("Garderoba")
+                .expenseList(new ArrayList<>())
+                .initialAmount(30.0)
+                .build();
+
+        when(categoryRepository.findById(anyLong())).thenReturn(Optional.ofNullable(category));
+        category.setCategoryName(categoryDto.getCategoryName());
+        when(categoryRepository.save(any(Category.class))).thenReturn(category);
+
+        CategoryDto categoryDtoTest = categoryService.patchCategoryDto(anyLong(), categoryDto);
+
+        assertEquals(categoryDtoTest.getCategoryName(), categoryDto.getCategoryName());
+        assertEquals(categoryDtoTest.getInitialAmount(), category.getInitialAmount());
     }
 
     @Test
