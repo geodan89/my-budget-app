@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @Getter
@@ -20,6 +21,7 @@ public class Expense {
 
     private Double expensePrice;
 
+    @NotNull
     private String expenseName;
 
     @ManyToOne
