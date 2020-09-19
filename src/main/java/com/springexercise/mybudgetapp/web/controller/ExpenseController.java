@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -55,17 +54,21 @@ public class ExpenseController {
 
     @PutMapping({"/category/{categoryId}/expense/{expenseId}"})
     public ResponseEntity<ExpenseDto> updateExpense(@PathVariable("categoryId") String categoryId,
-                                                    @PathVariable("expenseId") String expenseId, @RequestBody @Valid ExpenseDto expenseDto) {
+                                                    @PathVariable("expenseId") String expenseId, @RequestBody ExpenseDto expenseDto) {
         Long expId = Long.valueOf(expenseId);
         Long catId = Long.valueOf(categoryId);
         return new ResponseEntity<>(expenseService.updateExpense(catId, expId, expenseDto), HttpStatus.OK);
     }
 
-//    @PatchMapping({"/expense/{expenseId}"})
-//    public ResponseEntity<ExpenseDto> patchExpense(@PathVariable Long expenseId,
-//                                                   @RequestBody @Valid ExpenseDto expenseDto) {
-//        return new ResponseEntity<>(expenseService.updateExpense(expenseId, expenseDto), HttpStatus.OK);
-//    }
+    @PatchMapping({"/category/{categoryId}/expense/{expenseId}"})
+    public ResponseEntity<ExpenseDto> patchExpense(@PathVariable("categoryId") String categoryId,
+                                                   @PathVariable String expenseId,
+                                                   @RequestBody ExpenseDto expenseDto) {
+        Long catId = Long.valueOf(categoryId);
+        Long expId = Long.valueOf(expenseId);
+
+        return new ResponseEntity<>(expenseService.patchExpense(catId, expId, expenseDto), HttpStatus.OK);
+    }
 
 
     @DeleteMapping({"/category/{categoryId}/expense/{expenseId}"})

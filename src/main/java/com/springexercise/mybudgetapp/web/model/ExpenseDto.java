@@ -7,6 +7,7 @@ import com.springexercise.mybudgetapp.domain.Category;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import java.time.OffsetDateTime;
 
@@ -21,13 +22,18 @@ public class ExpenseDto {
     @Null
     private String id;
 
+    @NotBlank
+    @NotNull
+    @JsonProperty("expenseName")
+    private String expenseName;
+
+    @JsonProperty("expensePrice")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Double expensePrice;
 
-    @NotBlank
-    private String expenseName;
 
     @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    @JsonProperty("createdDate")
     private OffsetDateTime createdDate;
 
     @Null

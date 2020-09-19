@@ -15,4 +15,6 @@ public interface ExpenseService {
     ExpenseDto updateExpense(Long categoryId, Long expenseId, ExpenseDto expenseDto);
 
     void deleteById(Long categoryId, Long expenseId);
+
+    ExpenseDto patchExpense(Long catId, Long expId, ExpenseDto expenseDto);
 }

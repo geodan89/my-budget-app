@@ -38,12 +38,6 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseDto findByCategoryIdAndExpenseId(Long categoryId, Long expenseId) {
         Category category = getCategoryById(categoryId);
-//        Optional<Expense> expenseOptional = category.getExpenseList().stream()
-//                .filter(expense -> expense.getId().equals(expenseId))
-//                .findFirst();
-//        if (!expenseOptional.isPresent()) {
-//            throw new ExpenseNotFoundException(expenseId);
-//        }
         Expense expense = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
         if (!category.getExpenseList().contains(expense)) {
             log.debug("expense not found by expenseId=" + expenseId);
@@ -70,12 +64,6 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public ExpenseDto updateExpense(Long categoryId, Long expenseId, ExpenseDto expenseDto) {
         Category category = getCategoryById(categoryId);
-//        Optional<Expense> expenseOptional = category.getExpenseList().stream()
-//                .filter(expense -> expense.getId().equals(expenseId))
-//                .findFirst();
-//        if (!expenseOptional.isPresent()) {
-//            throw new ExpenseNotFoundException(expenseId);
-//        }
         Expense expenseFound = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
         if (!category.getExpenseList().contains(expenseFound)) {
             log.debug("expense not found by expenseId=" + expenseId);
@@ -90,15 +78,29 @@ public class ExpenseServiceImpl implements ExpenseService {
 
     }
 
+    public ExpenseDto patchExpense(Long categoryId, Long expenseId, ExpenseDto expenseDto) {
+        Category category = getCategoryById(categoryId);
+        Expense expenseFound = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
+        if (!category.getExpenseList().contains(expenseFound)) {
+            log.debug("expense not found by expenseId=" + expenseId);
+            throw new ExpenseNotFoundException(expenseId);
+        }
+        if (expenseDto.getExpensePrice() != null) {
+            Double diff = expenseFound.getExpensePrice() - expenseDto.getExpensePrice();
+            expenseFound.setExpensePrice(expenseDto.getExpensePrice());
+            category.setCurrentAmount(category.getCurrentAmount() + diff);
+        }
+
+        if (expenseDto.getExpenseName() != null) {
+            expenseFound.setExpenseName(expenseDto.getExpenseName());
+        }
+        Expense savedExpense = expenseRepository.save(expenseFound);
+        return expenseMapper.expenseToExpenseDto(savedExpense);
+    }
+
     @Override
     public void deleteById(Long categoryId, Long expenseId) {
         Category category = getCategoryById(categoryId);
-//        Optional<Expense> expenseOptional = category.getExpenseList().stream()
-//                .filter(expense -> expense.getId().equals(expenseId))
-//                .findFirst();
-//        if (!expenseOptional.isPresent()) {
-//            throw new ExpenseNotFoundException(expenseId);
-//        }
         Expense expense = expenseRepository.findById(expenseId).orElseThrow(ExpenseNotFoundException::new);
         if (!category.getExpenseList().contains(expense)) {
             log.debug("expense not found by expenseId=" + expenseId);
@@ -109,7 +111,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         expenseRepository.deleteById(expenseId);
     }
 
-    private Category getCategoryById(Long categoryId) {
+    public Category getCategoryById(Long categoryId) {
         Optional<Category> categoryOptional = categoryRepository.findById(categoryId);
         if (!categoryOptional.isPresent()) {
             log.debug("category not found by categoryId=" + categoryId);
