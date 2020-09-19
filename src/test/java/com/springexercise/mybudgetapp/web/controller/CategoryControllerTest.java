@@ -105,7 +105,6 @@ class CategoryControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.categoryName", equalTo("Vacante")))
-                .andExpect(jsonPath("$.initialAmount", equalTo("2500.0")))
                 .andExpect(jsonPath("$.categoryId", equalTo("1")));
     }
 
