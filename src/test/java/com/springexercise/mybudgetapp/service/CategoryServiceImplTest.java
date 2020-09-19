@@ -156,9 +156,16 @@ class CategoryServiceImplTest {
 
     @Test
     void deleteByIdTest() {
-        Long id = 1L;
 
-        categoryService.deleteById(id);
+        Category category = Category.builder()
+                .id(1L)
+                .categoryName("Garderoba")
+                .expenseList(new ArrayList<>())
+                .initialAmount(30.0)
+                .build();
+        when(categoryRepository.findById(1L)).thenReturn(Optional.ofNullable(category));
+
+        categoryService.deleteById(category.getId());
 
         verify(categoryRepository, times(1)).deleteById(anyLong());
     }
