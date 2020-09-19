@@ -22,20 +22,26 @@ public class CategoryDto {
     @Null
     private String id;
 
+    @NotBlank
+    @NotNull
+    @JsonProperty("categoryName")
+    private String categoryName;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @JsonProperty("initialAmount")
     private Double initialAmount;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @Null
     @JsonProperty("currentAmount")
     private Double currentAmount;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @NotBlank
-    @NotNull
-    private String categoryName;
+    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
+    @JsonProperty("createdDate")
+    private OffsetDateTime createdDate;
 
+    @JsonProperty("expenseList")
+    @Null
     private List<ExpenseDto> expenseList = new ArrayList<>();
 
-    @JsonFormat(pattern = "yyyy-MM-dd", shape = JsonFormat.Shape.STRING)
-    private OffsetDateTime createdDate;
 }

@@ -70,7 +70,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteById(Long categoryId) {
-        categoryRepository.deleteById(categoryId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
+        categoryRepository.deleteById(category.getId());
     }
 
 }
