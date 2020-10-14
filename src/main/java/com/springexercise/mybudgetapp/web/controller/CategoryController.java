@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
+    @PreAuthorize("hasAuthority('category.get')")
     @GetMapping("/categories")
     public ResponseEntity<CategoryListDto> getAllCategories() {
         List<CategoryDto> list = categoryService.getAllCategories();
@@ -30,6 +32,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryListDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('category.get')")
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable("categoryId") String categoryId) {
         Long catId = Long.valueOf(categoryId);
@@ -39,6 +42,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('category.create')")
     @PostMapping("/category")
     public ResponseEntity<CategoryDto> createNewCategory(@RequestBody CategoryDto categoryDto) {
         CategoryDto savedCategoryDto = categoryService.saveNewCategory(categoryDto);
@@ -48,6 +52,7 @@ public class CategoryController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAuthority('category.update')")
     @PutMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("categoryId") String categoryId,
                                                       @RequestBody CategoryDto categoryDto) {
@@ -56,6 +61,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.updateCategoryDto(catId, categoryDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('category.update')")
     @PatchMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDto> patchCategory(@PathVariable("categoryId") String categoryId,
                                                      @RequestBody CategoryDto categoryDto) {
@@ -64,6 +70,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.patchCategoryDto(catId, categoryDto), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAuthority('category.delete')")
     @DeleteMapping("/category/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable String categoryId) {
