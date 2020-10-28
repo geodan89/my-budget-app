@@ -1,9 +1,10 @@
 package com.springexercise.mybudgetapp.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.http.HttpServletRequest;
+
+//import org.springframework.security.web.util.matcher.RequestMatcher;
 
 //Spring Security exercise for creating a Custom Rest Header Authentication Filter
 
@@ -11,9 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 public class RestHeaderAuthFilter extends AbstractRestAuthFilter {
 
 
-    public RestHeaderAuthFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
-        super(requiresAuthenticationRequestMatcher);
-    }
+    //public RestHeaderAuthFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
+    //    super(requiresAuthenticationRequestMatcher);
+    //}
 
     protected String getPassword(HttpServletRequest httpServletRequest) {
         return httpServletRequest.getHeader("Api-Secret");

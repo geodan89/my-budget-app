@@ -1,27 +1,13 @@
 package com.springexercise.mybudgetapp.bootstrap;
 
-import com.springexercise.mybudgetapp.domain.security.Authority;
-import com.springexercise.mybudgetapp.domain.security.Role;
-import com.springexercise.mybudgetapp.domain.security.User;
-import com.springexercise.mybudgetapp.repository.security.AuthorityRepository;
-import com.springexercise.mybudgetapp.repository.security.RoleRepository;
-import com.springexercise.mybudgetapp.repository.security.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+//@Slf4j
+//@RequiredArgsConstructor
+//@Component
+public class UserDataLoader /*implements CommandLineRunner*/ {
 
-@Slf4j
-@RequiredArgsConstructor
-@Component
-public class UserDataLoader implements CommandLineRunner {
-
-    private final AuthorityRepository authorityRepository;
+    /*private final AuthorityRepository authorityRepository;
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -73,6 +59,8 @@ public class UserDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-    }
+        if (authorityRepository.count() == 0) {
+            loadSecurityData();
+        }
+    }*/
 }

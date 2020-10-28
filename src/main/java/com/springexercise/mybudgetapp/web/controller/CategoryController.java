@@ -2,16 +2,16 @@ package com.springexercise.mybudgetapp.web.controller;
 
 import com.springexercise.mybudgetapp.service.CategoryService;
 import com.springexercise.mybudgetapp.web.model.CategoryDto;
-import com.springexercise.mybudgetapp.web.model.CategoryListDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+//import org.springframework.security.access.prepost.PreAuthorize;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
@@ -22,17 +22,17 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PreAuthorize("hasAuthority('category.get')")
+    //@PreAuthorize("hasAuthority('category.get')")
     @GetMapping("/categories")
-    public ResponseEntity<CategoryListDto> getAllCategories() {
+    public ResponseEntity<List<CategoryDto>> getAllCategories() {
         List<CategoryDto> list = categoryService.getAllCategories();
-        CategoryListDto categoryListDto = new CategoryListDto();
-        categoryListDto.setCategoryListDto(list);
+//        CategoryListDto categoryListDto = new CategoryListDto();
+//        categoryListDto.setCategoryListDto(list);
 
-        return new ResponseEntity<>(categoryListDto, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('category.get')")
+    //@PreAuthorize("hasAuthority('category.get')")
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable("categoryId") String categoryId) {
         Long catId = Long.valueOf(categoryId);
@@ -42,7 +42,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('category.create')")
+    //@PreAuthorize("hasAuthority('category.create')")
     @PostMapping("/category")
     public ResponseEntity<CategoryDto> createNewCategory(@RequestBody CategoryDto categoryDto) {
         CategoryDto savedCategoryDto = categoryService.saveNewCategory(categoryDto);
@@ -52,7 +52,7 @@ public class CategoryController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAuthority('category.update')")
+    //@PreAuthorize("hasAuthority('category.update')")
     @PutMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("categoryId") String categoryId,
                                                       @RequestBody CategoryDto categoryDto) {
@@ -61,7 +61,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.updateCategoryDto(catId, categoryDto), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('category.update')")
+    //@PreAuthorize("hasAuthority('category.update')")
     @PatchMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDto> patchCategory(@PathVariable("categoryId") String categoryId,
                                                      @RequestBody CategoryDto categoryDto) {
@@ -70,7 +70,7 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.patchCategoryDto(catId, categoryDto), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('category.delete')")
+    //@PreAuthorize("hasAuthority('category.delete')")
     @DeleteMapping("/category/{categoryId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable String categoryId) {

@@ -2,7 +2,6 @@ package com.springexercise.mybudgetapp.web.controller;
 
 import com.springexercise.mybudgetapp.service.ExpenseService;
 import com.springexercise.mybudgetapp.web.model.ExpenseDto;
-import com.springexercise.mybudgetapp.web.model.ExpenseListDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -22,13 +22,13 @@ public class ExpenseController {
 
 
     @GetMapping("/category/{categoryId}/expenses")
-    public ResponseEntity<ExpenseListDto> getAllExpenses(@PathVariable("categoryId") String categoryId) {
+    public ResponseEntity<List<ExpenseDto>> getAllExpenses(@PathVariable("categoryId") String categoryId) {
         Long catId = Long.valueOf(categoryId);
         List<ExpenseDto> list = expenseService.getAllExpenses(catId);
-        ExpenseListDto expenseListDto = new ExpenseListDto();
-        expenseListDto.setExpenseDtoList(list);
+//        ExpenseListDto expenseListDto = new ExpenseListDto();
+//        expenseListDto.setExpenseDtoList(list);
 
-        return new ResponseEntity<>(expenseListDto, HttpStatus.OK);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
 
