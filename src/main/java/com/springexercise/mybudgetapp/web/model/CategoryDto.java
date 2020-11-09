@@ -41,7 +41,6 @@ public class CategoryDto {
     private OffsetDateTime createdDate;
 
     @JsonProperty("expenseList")
-    @Null
     private List<ExpenseDto> expenseList = new ArrayList<>();
 
 }
