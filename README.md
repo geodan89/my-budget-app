@@ -12,4 +12,4 @@ The Api Documentation has been created using Swagger Hub, I've written it in YAM
 
 
 
-![alt text](https://github.com/geodan89/spring-budget-app/blob/master/budget%20app%20index%20page.png)
+![alt text](https://github.com/geodan89/my-budget-app/blob/master/Screenshot%202020-11-09%20at%2022.12.56.png)
